@@ -27,5 +27,5 @@ version_from_gemfile() {
 
 if should_find_in_gemfile; then
   GEMFILE_PATH="$(find_gemfile_path)"
-  echo version_from_gemfile
+  echo $(version_from_gemfile)
 fi
