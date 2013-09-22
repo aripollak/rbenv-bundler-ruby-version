@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# If a custom Ruby version is not already defined per-shell or locally, this
+# looks for a Ruby version in the current tree's Gemfile and prints out that
+# version.
+
+[ -n "$RBENV_DEBUG" ] && set -x
+
+find_gemfile_path() {
+  local root="$1"
+  while [ -n "$root" ]; do
+    if [ -e "${root}/Gemfile" ]; then
+      echo "${root}/Gemfile"
+      exit
+    fi
+    root="${root%/*}"
+  done
+}
+
+should_find_in_gemfile() {
+  $(rbenv-shell 2>/dev/null) || $(rbenv-local 2>/dev/null)
+}
+
+version_from_gemfile() {
+  grep '^ruby' $GEMFILE_PATH | sed -e "s/^ruby ['\"]//" -e "s/['\"]$//" | head -1
+}
+
+if should_find_in_gemfile; then
+  GEMFILE_PATH="$(find_gemfile_path)"
+  echo version_from_gemfile
+fi
