@@ -1,9 +1,10 @@
 rbenv-bundler-ruby-version
 ==========================
 
-Plugin for [rbenv](https://github.com/sstephenson/rbenv) to use a ruby version from[bundler](http://bundler.io/)'s Gemfile. If a custom Ruby version 
-is not already defined per-shell or locally (like in `.ruby-version`, this looks for a Ruby version in the current
-tree's Gemfile and uses that version.
+Plugin for [rbenv](https://github.com/sstephenson/rbenv) to use a ruby version from
+[bundler](http://bundler.io/)'s Gemfile. If a custom Ruby version 
+is not already defined per-shell or locally per-directory (like in `.ruby-version`), this looks
+for a Ruby version in the current tree's Gemfile and uses that version.
 
 Installation
 ------------
@@ -11,7 +12,7 @@ Installation
 
   ```sh
   git clone https://github.com/aripollak/rbenv-bundler-ruby-version.git \
-    ~/.rbenv/plugins/rbenv-bundler-ruby-version
+      ~/.rbenv/plugins/rbenv-bundler-ruby-version
   ```
   
 1. If you don't already have a symlink in `~/.rbenv/versions` from your latest Ruby patchlevel to the base version,
