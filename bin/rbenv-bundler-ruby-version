@@ -18,7 +18,7 @@ find_gemfile_path() {
 }
 
 should_find_in_gemfile() {
-  $(rbenv-shell 2>/dev/null) || $(rbenv-local 2>/dev/null)
+  [ -z "$(rbenv-shell 2>/dev/null)" ] && [ -z "$(rbenv-local 2>/dev/null)" ]
 }
 
 version_from_gemfile() {
@@ -26,6 +26,9 @@ version_from_gemfile() {
 }
 
 if should_find_in_gemfile; then
-  GEMFILE_PATH="$(find_gemfile_path)"
-  echo $(version_from_gemfile)
+  GEMFILE_PATH=$(find_gemfile_path "$PWD")
+
+  if [ -e "$GEMFILE_PATH" ]; then
+    version_from_gemfile
+  fi
 fi
