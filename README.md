@@ -6,6 +6,8 @@ Plugin for [rbenv](https://github.com/sstephenson/rbenv) to use a ruby version f
 is not already defined per-shell or locally per-directory (like in `.ruby-version`), this looks
 for a Ruby version in the current tree's Gemfile and uses that version.
 
+[![Build Status](https://travis-ci.org/aripollak/rbenv-bundler-ruby-version.png?branch=master)](https://travis-ci.org/aripollak/rbenv-bundler-ruby-version)
+
 Installation
 ------------
 1. Check the plugin out into your rbenv plugins directory:
@@ -28,5 +30,15 @@ to make this easier. Once you have rbenv-aliases installed: run:
 
 Caveats
 -------
-The logic currently used to find the version is pretty dumb, and it only supports simple lines
-like `ruby '2.0.0'`. Other interpreters are not supported at this point.
+The logic currently used to find the version is simplistic; rbenv-bundler-ruby-version supports:
+* simple `ruby '2.0.0'`
+* lines with engines like:
+  * `ruby '2.0.0', engine: 'jruby', engine_version: '1.7.8'`
+  * `ruby "2.0.0", :engine_version => "1.7.8", :engine => 'jruby'`
+* comments at the end of line (just strips them)
+
+The version* commands don't report the correct version (they have no hooks)
+
+The parsing is done with regular expressions, ie no ruby evaluation is done.
+So expressions and conditionals are NOT handled and anything else is not handled.
+Prepend "true && " in front of the ruby line if you are doing such and want to hide it from this plugin.
