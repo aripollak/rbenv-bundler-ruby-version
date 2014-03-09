@@ -32,13 +32,20 @@ Caveats
 -------
 The logic currently used to find the version is simplistic; rbenv-bundler-ruby-version supports:
 * simple `ruby '2.0.0'`
-* lines with engines like:
+* lines with engines, like:
   * `ruby '2.0.0', engine: 'jruby', engine_version: '1.7.8'`
   * `ruby "2.0.0", :engine_version => "1.7.8", :engine => 'jruby'`
 * comments at the end of line (just strips them)
 
-The version* commands don't report the correct version (they have no hooks)
+The `version*` commands don't report the correct version (they have no hooks)
 
-The parsing is done with regular expressions, ie no ruby evaluation is done.
+The parsing is done with regular expressions, i.e. no ruby evaluation is done.
 So expressions and conditionals are NOT handled and anything else is not handled.
-Prepend "true && " in front of the ruby line if you are doing such and want to hide it from this plugin.
+Prepend `true && ` to the ruby line if you are doing such and want to hide it from this plugin.
+
+Development
+-----------
+Pull requests should include test coverage for the bugfix or feature.
+To run tests, install [bats](https://github.com/sstephenson/bats) and
+[rbenv](https://github.com/sstephenson/rbenv), then run `bats test` in the base
+directory of this plugin.

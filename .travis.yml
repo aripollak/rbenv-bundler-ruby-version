@@ -1,3 +1,2 @@
-script: test/run
-# skips unnecessary Ruby-specific setup
-language: c
+language: c # skip unnecessary Ruby-specific setup
+script: test/setup_bats_and_rbenv_and_run_tests

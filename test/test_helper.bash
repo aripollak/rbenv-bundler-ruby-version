@@ -1,95 +1,21 @@
-unset RBENV_VERSION
-unset RBENV_DIR
+EXAMPLE_APP_DIR="$BATS_TMPDIR/example_app"
+TEST_BASENAME="$(basename $BATS_TEST_DIRNAME)"
+PLUGIN_ROOT="${BATS_TEST_DIRNAME%${TEST_BASENAME}}"
 
-RBENV_TEST_DIR="${BATS_TMPDIR}/rbenv"
-PLUGIN="${RBENV_TEST_DIR}/root/plugins/rbenv-aliases"
-EXAMPLE_APP_DIR="${RBENV_TEST_DIR}/example_app"
-
-# guard against executing this block twice due to bats internals
-if [ "$RBENV_ROOT" != "${RBENV_TEST_DIR}/root" ]; then
-  export RBENV_ROOT="${RBENV_TEST_DIR}/root"
-  export HOME="${RBENV_TEST_DIR}/home"
-  local parent
-
-  # this differs if the test is being run individually or as a suite
-  parent="${BATS_TEST_DIRNAME%/.}"
-  parent="${parent%${parent##*/}}"
-  export RBENV_HOOK_PATH="${parent}etc/rbenv.d"
-
-  PATH=/usr/bin:/bin:/usr/sbin:/sbin
-  PATH="${RBENV_TEST_DIR}/bin:$PATH"
-  PATH="${BATS_TEST_DIRNAME}/bin:$PATH"
-  PATH="${BATS_TEST_DIRNAME}/../bin:$PATH"
-  PATH="${BATS_TEST_DIRNAME}/../rbenv/libexec:$PATH"
-  PATH="${BATS_TEST_DIRNAME}/../rbenv/test/libexec:$PATH"
-  PATH="${RBENV_ROOT}/shims:$PATH"
-  export PATH
-fi
+setup() {
+  export RBENV_ROOT="$BATS_TMPDIR/rbenv_root"
+  mkdir -p "$RBENV_ROOT/plugins"
+  ln -s "$PLUGIN_ROOT" "$RBENV_ROOT/plugins/bundler-ruby-version"
+}
 
 teardown() {
-  rm -rf "$RBENV_TEST_DIR"
+  rm -r "$EXAMPLE_APP_DIR"
+  rm -r "$RBENV_ROOT"
 }
 
-flunk() {
-  { if [ "$#" -eq 0 ]; then cat -
-    else echo "$@"
-    fi
-  } | sed "s:${RBENV_TEST_DIR}:TEST_DIR:g" >&2
-  return 1
-}
-
-# cd_into_project_with_Gemfile quote-char ruby_version [extra args]
-cd_into_project_with_Gemfile() {
-  mkdir -p "$EXAMPLE_APP_DIR"
-  cd "$EXAMPLE_APP_DIR"
-  q=${1:-'"'}
-  echo "ruby ${q}${2}${q}${3}" > "$EXAMPLE_APP_DIR/Gemfile"
-}
-
-# Creates fake version directories
-create_versions() {
-  for v in $*; do
-    d="$RBENV_ROOT/versions/$v"
-    mkdir -p "$d/bin"
-    echo $v > "$d/RELEASE.txt"
-    ln -nfs /bin/echo "$d/bin/ruby"
-  done
-}
-
-
-
-# assert_alias_version alias version
-
-assert_alias_version() {
-  if [ ! -f $RBENV_ROOT/versions/$1/RELEASE.txt ]
-  then
-    echo "Versions:"
-    (cd $RBENV_ROOT/versions ; ls -l)
-  fi
-  assert_equal "$2" `cat $RBENV_ROOT/versions/$1/RELEASE.txt 2>&1`
-}
-
-assert_alias_missing() {
-  if [ -f $RBENV_ROOT/versions/$1/RELEASE.txt ]
-  then
-    assert_equal "no-version" `cat $RBENV_ROOT/versions/$1/RELEASE.txt 2>&1`
-  fi
-}
-
-
-assert_success() {
-  if [ "$status" -ne 0 ]; then
-    flunk "command failed with exit status $status"
-  elif [ "$#" -gt 0 ]; then
-    assert_output "$1"
-  fi
-}
-
-assert_failure() {
-  if [ "$status" -eq 0 ]; then
-    flunk "expected failed exit status"
-  elif [ "$#" -gt 0 ]; then
-    assert_output "$1"
+assert() {
+  if ! "$@"; then
+    flunk "failed: $@"
   fi
 }
 
@@ -109,48 +35,33 @@ assert_output() {
   assert_equal "$expected" "$output"
 }
 
-assert_line() {
-  if [ "$1" -ge 0 ] 2>/dev/null; then
-    assert_equal "$2" "${lines[$1]}"
-  else
-    local line
-    for line in "${lines[@]}"; do
-      if [ "$line" = "$1" ]; then return 0; fi
-    done
-    flunk "expected line \`$1'"
+assert_success() {
+  if [ "$status" -ne 0 ]; then
+    flunk "command failed with exit status $status"
+  elif [ "$#" -gt 0 ]; then
+    assert_output "$1"
   fi
 }
 
-assert_line_starts_with() {
-  if [ "$1" -ge 0 ] 2>/dev/null; then
-    assert_equal "$2" "${lines[$1]}"
-  else
-    local line
-    for line in "${lines[@]}"; do
-      if [ -n "${line#${1}}" ]; then return 0; fi
-    done
-    flunk "expected line \`$1'"
-  fi
+# cd_into_project_with_gemfile quote_char ruby_version [extra_args]
+cd_into_project_with_gemfile() {
+  local q="$1"
+  mkdir -p "$EXAMPLE_APP_DIR"
+  cd "$EXAMPLE_APP_DIR"
+  echo "ruby ${q}${2}${q}${3}" > "$EXAMPLE_APP_DIR/Gemfile"
 }
 
-refute_line() {
-  if [ "$1" -ge 0 ] 2>/dev/null; then
-    local num_lines="${#lines[@]}"
-    if [ "$1" -lt "$num_lines" ]; then
-      flunk "output has $num_lines lines"
+# Creates fake version directory
+create_version() {
+  d="$RBENV_ROOT/versions/$1/bin"
+  mkdir -p "$d"
+  ln -s /bin/echo "$d/ruby"
+}
+
+flunk() {
+  { if [ "$#" -eq 0 ]; then cat -
+    else echo "$@"
     fi
-  else
-    local line
-    for line in "${lines[@]}"; do
-      if [ "$line" = "$1" ]; then
-        flunk "expected to not find line \`$line'"
-      fi
-    done
-  fi
-}
-
-assert() {
-  if ! "$@"; then
-    flunk "failed: $@"
-  fi
+  } >&2
+  return 1
 }
