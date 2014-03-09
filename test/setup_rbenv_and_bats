@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ -d bats ]; then
+  ( 
+    cd bats
+    echo Updating bats:
+    git pull
+  )
+else
+  git clone https://github.com/sstephenson/bats.git 
+fi
+( 
+  cd bats
+  echo "bats revision: `git rev-parse --short HEAD`"
+)
+
+if [ -d rbenv ]; then
+  ( 
+    cd rbenv
+    echo Updating rbenv:
+    git pull
+  )
+else
+  git clone https://github.com/sstephenson/rbenv.git
+fi
+( 
+  cd rbenv
+  echo "rbenv revision: `git rev-parse --short HEAD`"
+)
