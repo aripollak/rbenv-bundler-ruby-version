@@ -22,7 +22,14 @@ should_find_in_gemfile() {
 }
 
 version_from_gemfile() {
-  grep '^ruby' $GEMFILE_PATH | sed -e "s/^ruby ['\"]//" -e "s/['\"]$//" | head -1
+  # handles simple ruby statements, as well as engine and engine_version,
+  # with single or double quotes and in either order
+
+  grep '^\s*ruby' $GEMFILE_PATH | sed -e 's/\s*#.*//' -e 's/engine:/:engine =>/' \
+        -e 's/engine_version:/:engine_version =>/' \
+        -e "s/.*:engine\s*=>\s*['\"]\([^'\"]*\).*:engine_version\s*=>\s*['\"]\([^'\"]*\).*/\1-\2/" \
+        -e "s/.*:engine_version\s*=>\s*['\"]\([^'\"]*\).*:engine\s*=>\s*['\"]\([^'\"]*\).*/\2-\1/" \
+        -e "s/^\s*ruby\s*['\"]\([^'\"]*\).*/\1/" | head -1
 }
 
 if should_find_in_gemfile; then
