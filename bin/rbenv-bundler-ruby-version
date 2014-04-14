@@ -25,11 +25,13 @@ version_from_gemfile() {
   # handles simple ruby statements, as well as engine and engine_version,
   # with single or double quotes and in either order
 
-  grep '^\s*ruby' "$GEMFILE_PATH" | sed -e 's/[[:space:]]*#.*//' -e 's/engine:/:engine =>/' \
-        -e 's/engine_version:/:engine_version =>/' \
-        -e "s/.*:engine[[:space:]]*=>[[:space:]]*['\"]\([^'\"]*\).*:engine_version[[:space:]]*=>[[:space:]]*['\"]\([^'\"]*\).*/\1-\2/" \
-        -e "s/.*:engine_version[[:space:]]*=>[[:space:]]*['\"]\([^'\"]*\).*:engine[[:space:]]*=>[[:space:]]*['\"]\([^'\"]*\).*/\2-\1/" \
-        -e "s/^[[:space:]]*ruby[[:space:]]*['\"]\([^'\"]*\).*/\1/" | head -1
+  grep '^\s*ruby' "$GEMFILE_PATH" |
+    sed -e 's/[[:space:]]/ /g' -e 's/#.*//' \
+        -e 's/engine:/:engine =>/' -e 's/engine_version:/:engine_version =>/' \
+        -e "s/.*:engine *=> *['\"]\([^'\"]*\).*:engine_version *=> *['\"]\([^'\"]*\).*/\1-\2/" \
+        -e "s/.*:engine_version *=> *['\"]\([^'\"]*\).*:engine *=> *['\"]\([^'\"]*\).*/\2-\1/" \
+        -e "s/ *ruby ['\"]\([^'\"]*\).*/\1/" |
+    head -1
 }
 
 if should_find_in_gemfile; then

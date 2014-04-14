@@ -2,6 +2,14 @@
 
 load test_helper
 
+@test 'Recognize simple ruby version in single quotes with leading spaces' {
+  mkdir -p "$EXAMPLE_APP_DIR"
+  cd "$EXAMPLE_APP_DIR"
+  echo "  ruby '1.2.3'" > "$EXAMPLE_APP_DIR/Gemfile"
+  run rbenv bundler-ruby-version
+  assert_success '1.2.3'
+}
+
 @test 'Recognize simple ruby version in single quotes' {
   cd_into_project_with_gemfile "'" 1.2.3
   run rbenv bundler-ruby-version
@@ -18,6 +26,12 @@ load test_helper
   cd_into_project_with_gemfile "'" 1.2.3 '# a comment'
   run rbenv bundler-ruby-version
   assert_success '1.2.3'
+}
+
+@test 'Recognize jruby ruby version in single quotes with extra spaces' {
+  cd_into_project_with_gemfile '"' 1.2.3 ",   :engine => 'jruby',   :engine_version => '1.6.7'  "
+  run rbenv bundler-ruby-version
+  assert_success 'jruby-1.6.7'
 }
 
 @test 'Recognize jruby ruby version in single quotes' {
