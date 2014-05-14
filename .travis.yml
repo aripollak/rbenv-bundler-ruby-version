@@ -1,2 +1,5 @@
 language: c # skip unnecessary Ruby-specific setup
+os:
+  - linux
+  - osx
 script: test/setup_bats_and_rbenv_and_run_tests
