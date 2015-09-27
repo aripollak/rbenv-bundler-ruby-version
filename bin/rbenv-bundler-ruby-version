@@ -18,7 +18,7 @@ find_gemfile_path() {
 }
 
 should_find_in_gemfile() {
-  [ -z "$(rbenv-shell 2>/dev/null)" ] && [ -z "$(rbenv-local 2>/dev/null)" ]
+  [ -z "$(rbenv-sh-shell 2>/dev/null)" ] && [ -z "$(rbenv-local 2>/dev/null)" ]
 }
 
 version_from_gemfile() {
