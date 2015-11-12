@@ -10,6 +10,14 @@ load test_helper
   assert_success ''
 }
 
+@test 'Allow overriding version with rbenv shell' {
+  cd_into_project_with_gemfile "'" 1.2.3
+  create_version 4.5.6
+  export RBENV_VERSION=4.5.6
+  run rbenv bundler-ruby-version
+  assert_success ''
+}
+
 @test 'Recognize simple ruby version in single quotes with leading spaces' {
   mkdir -p "$EXAMPLE_APP_DIR"
   cd "$EXAMPLE_APP_DIR"
