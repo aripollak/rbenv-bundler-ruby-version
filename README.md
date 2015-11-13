@@ -14,7 +14,7 @@ Installation
       ~/.rbenv/plugins/rbenv-bundler-ruby-version
   ```
   
-1. If you don't already have a symlink in `~/.rbenv/versions` from your latest Ruby patchlevel (2.0.0-p247) to the base version (2.0.0), now would be a good time to do that. You can install [rbenv-aliases](https://github.com/tpope/rbenv-aliases) to make this easier. Once you have rbenv-aliases installed: run:
+1. **Not needed starting from Ruby 2.1**: If you don't already have a symlink in `~/.rbenv/versions` from your latest Ruby patchlevel (2.0.0-p247) to the base version (2.0.0), now would be a good time to do that. You can install [rbenv-aliases](https://github.com/tpope/rbenv-aliases) to make this easier. Once you have rbenv-aliases installed: run:
 
   ```sh
   rbenv alias --auto
