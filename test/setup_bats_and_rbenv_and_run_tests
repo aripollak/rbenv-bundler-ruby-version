@@ -1,10 +1,9 @@
 #!/bin/bash
 
 BATS_TAG=v0.4.0
-RBENV_TAG=v0.4.0
 
 git clone --depth 1 --branch $BATS_TAG https://github.com/sstephenson/bats.git
-git clone --depth 1 --branch $RBENV_TAG https://github.com/sstephenson/rbenv.git
+git clone --depth 1 https://github.com/sstephenson/rbenv.git
 
 export PATH="$PWD/rbenv/bin:$PATH"
 exec bats/bin/bats --tap test/$1
