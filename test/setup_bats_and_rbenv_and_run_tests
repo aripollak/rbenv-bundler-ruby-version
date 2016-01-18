@@ -9,4 +9,4 @@ PATH="$PWD/bats/bin:$PATH"
 git clone --depth 1 --branch $RBENV_TAG https://github.com/sstephenson/rbenv.git
 PATH="$PWD/rbenv/bin:$PATH"
 
-exec bats --tap test/"$1"
+exec bats ${CI:+--tap} test/"$1"
