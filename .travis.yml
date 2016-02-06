@@ -1,3 +1,4 @@
+sudo: false # opt in to containers (faster)
 language: c # skip unnecessary Ruby-specific setup
 os:
   - linux
