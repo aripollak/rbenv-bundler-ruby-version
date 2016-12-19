@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BATS_TAG=v0.4.0
-RBENV_TAG=v0.4.0
+RBENV_TAG=v1.0.0
 
 git clone --depth 1 --branch $BATS_TAG https://github.com/sstephenson/bats.git
 PATH="$PWD/bats/bin:$PATH"
