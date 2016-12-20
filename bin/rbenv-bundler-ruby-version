@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 #
-# If a custom Ruby version is not already defined per-shell or locally, this
-# looks for a Ruby version in the current tree's Gemfile and prints out that
-# version.
+# If a custom Ruby version is not already defined locally, this looks for a
+# Ruby version in the current tree's Gemfile and prints out that version.
 
 [ -n "$RBENV_DEBUG" ] && set -x
 
