@@ -9,20 +9,20 @@ Requirements: rbenv 1.0.0 or higher
 
 Installation
 ------------
-1. Check the plugin out into your rbenv plugins directory:
+* Check the plugin out into your rbenv plugins directory:
 
   ```sh
   git clone https://github.com/aripollak/rbenv-bundler-ruby-version.git \
       "$(rbenv root)"/plugins/rbenv-bundler-ruby-version
   ```
 
-1. **Not needed starting from Ruby 2.1**: If you don't already have a symlink in `"$(rbenv root)"/versions` from your latest Ruby patchlevel (2.0.0-p247) to the base version (2.0.0), now would be a good time to do that. You can install [rbenv-aliases](https://github.com/tpope/rbenv-aliases) to make this easier. Once you have rbenv-aliases installed: run:
+* **Not needed starting from Ruby 2.1**: If you don't already have a symlink in `"$(rbenv root)"/versions` from your latest Ruby patchlevel (2.0.0-p247) to the base version (2.0.0), now would be a good time to do that. You can install [rbenv-aliases](https://github.com/tpope/rbenv-aliases) to make this easier. Once you have rbenv-aliases installed: run:
 
   ```sh
   rbenv alias --auto
   ```
 
-1. That's it! Now `ruby`, `gem`, and your other rbenv shims should automatically find the correct Ruby version.
+* That's it! Now `ruby`, `gem`, and your other rbenv shims should automatically find the correct Ruby version.
 
 Caveats
 -------
