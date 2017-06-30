@@ -29,7 +29,7 @@ version_from_gemfile() {
         -e 's/engine:/:engine =>/' -e 's/engine_version:/:engine_version =>/' \
         -e "s/.*:engine *=> *['\"]\([^'\"]*\).*:engine_version *=> *['\"]\([^'\"]*\).*/\1-\2/" \
         -e "s/.*:engine_version *=> *['\"]\([^'\"]*\).*:engine *=> *['\"]\([^'\"]*\).*/\2-\1/" \
-        -e "s/ *ruby ['\"]\([^'\"]*\).*/\1/" |
+        -e "s/ *ruby *['\"]\([^'\"]*\).*/\1/" |
     head -1
 }
 
