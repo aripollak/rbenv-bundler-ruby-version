@@ -9,7 +9,13 @@ Requirements: rbenv 1.0.0 or higher
 
 Installation
 ------------
-* Check the plugin out into your rbenv plugins directory:
+
+### Using homebrew on MacOS
+
+This plugin is available in homebrew `brew install rbenv-bundler-ruby-version`
+
+### Manual installation
+Check the plugin out into your rbenv plugins directory:
 
   ```sh
   git clone https://github.com/aripollak/rbenv-bundler-ruby-version.git \
